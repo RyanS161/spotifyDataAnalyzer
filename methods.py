@@ -3,17 +3,16 @@ import datetime
 import os
 
 
-
 def parse(dir):
     merged_files = []
-    with open("mydata/0result.json", "w") as outfile:
+    with open(dir + "0result.json", "w") as outfile:
         for file in os.listdir(dir):
             if file.startswith('StreamingHistory'):
                 with open(dir + file, encoding="utf8") as infile:
                     file_data = json.load(infile)
                     merged_files += file_data
         json.dump(merged_files, outfile)
-    with open('mydata/0result.json', encoding='utf8') as file:
+    with open(dir + '0result.json', encoding='utf8') as file:
         history = json.load(file)
     return history
 
@@ -38,28 +37,6 @@ def songsByTime(history):
             if y['trackName'] == x:
                 songs[x] += y['msPlayed']
     return songs
-
-def fastForward(history):
-    songsMax = {}
-    for x in history:
-        if x['trackName'] not in songsMax and x['msPlayed'] > 30000:
-            songsMax[x['trackName']] = 0
-    for x in songsMax:
-        for y in history:
-            if y['trackName'] == x and y['msPlayed'] > songsMax[x]:
-                songsMax[x] = y['msPlayed']
-    fastForwardCount = {}
-    for x in songsMax:
-        fastForwardCount[x] = [0,0]
-    for x in fastForwardCount:
-        for y in history:
-            if y['trackName'] == x and y['msPlayed'] < (songsMax[x] - 5000):
-                fastForwardCount[x][0] += 1
-            if y['trackName'] == x and y['msPlayed'] >= (songsMax[x] - 5000):
-                fastForwardCount[x][1] += 1
-    for x in sorted(fastForwardCount, key=fastForwardCount.get, reverse=True):
-        percentage = (fastForwardCount[x][0]/(fastForwardCount[x][0] + fastForwardCount[x][1]))*100
-        print(f"{x:<50} {fastForwardCount[x][0]}\({fastForwardCount[x][0]}+{fastForwardCount[x][1]}) {percentage:.2f}%")
 
 def printBT(dict):
     for x in sorted(dict, key=dict.get, reverse=True):
@@ -89,10 +66,10 @@ def monthSlice(month, dict):
             arr.append(x)
     return arr
 
-def hourSlice(hour, dict):
+def hourSlice(hour, dict, timezone):
     arr = []
     for x in dict:
-        songTime = datetime.datetime.strptime(x['endTime'], '%Y-%m-%d %H:%M') - datetime.timedelta(hours=6)
+        songTime = datetime.datetime.strptime(x['endTime'], '%Y-%m-%d %H:%M') - datetime.timedelta(hours=timezone)
         if songTime.hour == hour:
             arr.append(x)
     return arr
