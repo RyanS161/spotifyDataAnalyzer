@@ -1,6 +1,4 @@
-import json
-import datetime
-import os
+import json, datetime, os
 
 
 def parse(dir):
