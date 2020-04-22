@@ -3,14 +3,14 @@ import json, datetime, os
 
 def parse(dir):
     merged_files = []
-    with open(dir + "0result.json", "w") as outfile:
+    with open(dir + "/0result.json", "w") as outfile:
         for file in os.listdir(dir):
             if file.startswith('StreamingHistory'):
-                with open(dir + file, encoding="utf8") as infile:
+                with open(dir + "/" + file, encoding="utf8") as infile:
                     file_data = json.load(infile)
                     merged_files += file_data
         json.dump(merged_files, outfile)
-    with open(dir + '0result.json', encoding='utf8') as file:
+    with open(dir + '/0result.json', encoding='utf8') as file:
         history = json.load(file)
     return history
 
