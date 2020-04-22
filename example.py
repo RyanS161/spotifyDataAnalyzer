@@ -1,8 +1,8 @@
-from spotifyDataAnalyzer.methods import *
+from spotifyDataAnalyzer.spotifyDataAnalyzer import *
 
 
 # Add the directory containing the streaming data json files here:
-dir = "C:/Users/Ryan/PycharmProjects/wrapped2.0/MyData/"
+dir = "C:/Users/example/MyData/"
 
 # The streaming history object is created here:
 history = parse(dir)
